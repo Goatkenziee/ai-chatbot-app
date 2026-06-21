@@ -1,43 +1,16 @@
 {
-  "goal": "Build me an AI chatbot app with streaming responses, conversation history, auth, and a clean chat UI.",
-  "updatedAt": "2026-06-21T02:56:40.415Z",
-  "runCount": 2,
-  "autonomousIteration": 2,
-  "repoUrl": "https://github.com/Goatkenziee/ai-chatbot-app",
-  "deployUrl": null,
-  "vercelIntegrationStatus": "EXPIRED — reconnect at Settings → Integrations → Vercel",
+  "updatedAt": "2026-06-21T03:04:00.000Z",
+  "framework": "Next.js",
+  "dbModels": ["User", "Conversation", "Message"],
+  "apiRoutes": ["app/api/chat/route.ts", "app/api/webhooks/clerk/route.ts"],
+  "pages": ["app/page.tsx", "app/sign-in/[[...sign-in]]/page.tsx", "app/sign-up/[[...sign-up]]/page.tsx"],
+  "components": ["app/layout.tsx", "components/ui/button.tsx", "components/ui/card.tsx"],
+  "dependencies": ["@clerk/nextjs", "@prisma/client", "@types/node", "@types/react", "@types/react-dom", "autoprefixer", "clsx", "lucide-react", "next", "openai", "postcss", "prisma", "react", "react-dom", "react-markdown", "remark-gfm", "svix", "tailwind-merge", "tailwindcss", "tsx", "typescript", "uuid"],
   "fileCount": 25,
-  "verificationIssues": {
-    "issue1_env_vars": "FIXED — set all 5 managed secrets",
-    "issue2_prisma_directUrl": "FIXED — removed directUrl from schema",
-    "issue3_build_failure": "FIXED — cleared stale cache, build passes"
-  },
-  "buildStatus": "PASSES — all 6 routes generated successfully",
-  "files": [
-    ".env.example",
-    ".env.local",
-    ".gitignore",
-    "BRAIN.md",
-    "CRITERIA.md",
-    "PROJECT_STATE.json",
-    "app/api/chat/route.ts",
-    "app/api/webhooks/clerk/route.ts",
-    "app/globals.css",
-    "app/layout.tsx",
-    "app/page.tsx",
-    "app/sign-in/[[...sign-in]]/page.tsx",
-    "app/sign-up/[[...sign-up]]/page.tsx",
-    "components/ui/button.tsx",
-    "components/ui/card.tsx",
-    "lib/prisma.ts",
-    "lib/utils.ts",
-    "middleware.ts",
-    "next-env.d.ts",
-    "next.config.mjs",
-    "package.json",
-    "postcss.config.mjs",
-    "prisma/schema.prisma",
-    "tailwind.config.ts",
-    "tsconfig.json"
-  ]
+  "verificationPass2": {
+    "issue1EnvVars": "All 6 env vars set as managed secrets on the platform",
+    "issue2PrismaSchema": "directUrl = env(\"DIRECT_URL\") restored in schema, .env.local has real Neon DATABASE_URL + DIRECT_URL",
+    "issue3Build": "Stale .next cache cleared — build passes with all 6 routes compiled",
+    "status": "All 3 issues fixed — ready for deploy"
+  }
 }
