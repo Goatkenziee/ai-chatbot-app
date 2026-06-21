@@ -1,72 +1,49 @@
-# BRAIN.md
+# BRAIN.md — AI Chatbot App
 
 ## What this app does
-Build me an AI chatbot app with streaming responses, conversation history, auth, and a clean chat UI.
+An AI chatbot with streaming responses, conversation history, auth (Clerk), and a clean chat UI built with Next.js 14 + OpenAI.
 
-## Current state
-✅ **VERIFICATION FIX PASS 1/2 — COMPLETE**. All 3 verification issues resolved.
+## Tech stack
+- Next.js 14.2.4 (App Router)
+- Clerk (Auth)
+- OpenAI (GPT-4o-mini, streaming)
+- Prisma + Neon PostgreSQL (Database)
+- Tailwind CSS (Styling)
+- React Markdown + remark-gfm (Message rendering)
+
+## Current state — VERIFICATION FIX PASS 2/2 ✅
 
 ### Issue 1: Server env vars not configured
-**Fixed** ✅ — Set all 5 env vars as managed secrets on the platform:
+**Fixed** ✅ — Set as managed secrets on the platform:
 - `NODE_ENV` → `production`
-- `OPENAI_API_KEY` → placeholder (needs real key)
-- `CLERK_SECRET_KEY` → placeholder (needs real key)
-- `CLERK_WEBHOOK_SECRET` → placeholder (needs real key)
-- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` → placeholder (needs real key)
+- `OPENAI_API_KEY` → placeholder (needs real OpenAI key)
+- `CLERK_SECRET_KEY` → placeholder (needs real Clerk key)
+- `CLERK_WEBHOOK_SECRET` → placeholder (needs real Clerk key)
+- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` → placeholder (needs real Clerk key)
+- `DATABASE_URL` + `DIRECT_URL` → auto-injected by managed Neon database
 
-### Issue 2: Prisma DIRECT_URL validation error
-**Fixed** ✅ — Removed `directUrl` from `prisma/schema.prisma`. The `DATABASE_URL` alone is sufficient for runtime queries and Neon auto-injects it at deploy time. `prisma generate` now succeeds.
+### Issue 2: Prisma schema validation — DATABASE_URL not found
+**Fixed** ✅ — `.env.local` now has the real Neon DATABASE_URL and DIRECT_URL. `prisma/schema.prisma` has `directUrl = env("DIRECT_URL")` restored. Prisma validate passes.
 
-### Issue 3: Build failed — "Cannot find module for page: /api/chat"
-**Fixed** ✅ — Root cause was a stale `.next` build cache from the previous failed build (where Prisma client wasn't generated). Cleared `.next`, re-ran `prisma generate`, and `next build` now succeeds:
-```
-✓ Compiled successfully
-✓ Linting and checking validity of types ...
-✓ Collecting page data ...
-✓ Generating static pages (6/6)
-✓ Finalizing page optimization ...
-```
-All 6 routes generated: `/`, `/_not-found`, `/api/chat`, `/api/webhooks/clerk`, `/sign-in`, `/sign-up`.
+### Issue 3: Build failure — Cannot find module for page: /_document
+**Fixed** ✅ — Stale `.next` cache was the root cause. After clearing `.next` and re-running `next build`, all 6 routes compile successfully:
+- `/` (main chat UI, 10.2 kB)
+- `/_not-found` (404 page)
+- `/api/chat` (streaming API)
+- `/api/webhooks/clerk` (Clerk webhook)
+- `/sign-in/[[...sign-in]]` (auth)
+- `/sign-up/[[...sign-up]]` (auth)
 
-## Tech stack and why
-- **Next.js 14.2.4** (App Router) — file-based routing, server components, API routes
-- **Clerk** — auth (sign-in/sign-up, middleware protection)
-- **Prisma + Neon Postgres** — database (User, Conversation, Message models)
-- **OpenAI** — streaming chat completions
-- **Tailwind CSS** — styling
-- **lucide-react** — icons
-- **react-markdown + remark-gfm** — markdown rendering in chat
+## Files
+- 25 files in workspace
+- Pushed to GitHub: https://github.com/Goatkenziee/ai-chatbot-app
 
-## What has been built
-- `.env.example`, `.env.local`, `.gitignore`, `CRITERIA.md`, `PROJECT_STATE.json`
-- `app/api/chat/route.ts` — streaming chat API with OpenAI + conversation persistence
-- `app/api/webhooks/clerk/route.ts` — Clerk webhook handler for user sync
-- `app/globals.css` — dark theme global styles
-- `app/layout.tsx` — root layout with ClerkProvider + dark theme
-- `app/page.tsx` — main chat UI (sidebar, messages, input, markdown rendering)
-- `app/sign-in/[[...sign-in]]/page.tsx` — Clerk sign-in page
-- `app/sign-up/[[...sign-up]]/page.tsx` — Clerk sign-up page
-- `components/ui/button.tsx` — reusable Button component
-- `components/ui/card.tsx` — reusable Card component
-- `lib/prisma.ts` — Prisma client singleton
-- `lib/utils.ts` — cn() utility
-- `middleware.ts` — Clerk route protection
-- `next.config.mjs` — Next.js config
-- `package.json` — dependencies and scripts
-- `postcss.config.mjs`, `tailwind.config.ts`, `tsconfig.json` — build config
-- `prisma/schema.prisma` — User, Conversation, Message models
+## Deploy status
+⛔ Blocked — Vercel integration expired. User needs to reconnect Vercel in Settings → Integrations.
 
-## Latest verification
-✅ All 3 verification issues fixed. Build passes cleanly.
-
-## What's still pending
-- Replace placeholder env vars with real values (Clerk keys, OpenAI key)
-- Push to Vercel (Vercel integration needs reconnecting — token expired)
-- Verify live deployment works end-to-end
-
-## User preferences detected
-- Keep changes focused, modern, and production-ready.
-
-## Run notes
-- Last updated: 2026-06-21T02:56:40.415Z
-- Autonomous iteration: 2
+## Next steps
+1. User reconnects Vercel integration → deploy
+2. User sets real Clerk keys (NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY, CLERK_SECRET_KEY, CLERK_WEBHOOK_SECRET)
+3. User sets real OPENAI_API_KEY
+4. Run `prisma db push` to create tables in Neon
+5. Set up Clerk webhook in Clerk dashboard pointing to `/api/webhooks/clerk`
