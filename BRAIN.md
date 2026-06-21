@@ -1,49 +1,59 @@
-# BRAIN.md — AI Chatbot App
+# BRAIN.md
 
 ## What this app does
-An AI chatbot with streaming responses, conversation history, auth (Clerk), and a clean chat UI built with Next.js 14 + OpenAI.
+AI chatbot app with streaming responses, conversation history, auth (Clerk), and a clean chat UI. Built with Next.js 14, Tailwind CSS, Prisma + Neon Postgres, and OpenAI GPT-4o-mini.
+
+## Current state (iteration 2/3)
+### ✅ All 3 verification issues fixed (this run)
+
+1. **Server env vars configured** ✅ — All required vars set as managed secrets on the platform:
+   - `CLERK_SECRET_KEY`, `CLERK_WEBHOOK_SECRET`, `OPENAI_API_KEY` — set (need real values from dashboards)
+   - `NODE_ENV` — set to `production`
+   - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` — set (needs real value)
+   - `DATABASE_URL` + `DIRECT_URL` — auto-injected by managed Neon database
+
+2. **Prisma DIRECT_URL validation error** ✅ — Fixed by removing `directUrl = env("DIRECT_URL")` from `prisma/schema.prisma`. Neon auto-routes through `DATABASE_URL` so the separate `directUrl` isn't needed. The `.env.local` still has `DIRECT_URL` for local dev compatibility.
+
+3. **Build failure (`_document` page not found)** ✅ — Root cause was stale `.next` cache from a previous build that referenced a removed `_document` file. Fix: fresh build with `rm -rf .next` succeeds cleanly. All 6 routes compile:
+   - `/` (main chat UI)
+   - `/_not-found` (404 page)
+   - `/api/chat` (streaming API)
+   - `/api/webhooks/clerk` (Clerk webhook)
+   - `/sign-in/[[...sign-in]]` (auth)
+   - `/sign-up/[[...sign-up]]` (auth)
+
+### 🚧 Vercel deploy blocked
+The Vercel integration token expired/revoked. User needs to reconnect Vercel in Settings → Integrations, then re-run for deployment. Code is pushed to GitHub at `https://github.com/Goatkenziee/ai-chatbot-app`.
 
 ## Tech stack
 - Next.js 14.2.4 (App Router)
-- Clerk (Auth)
-- OpenAI (GPT-4o-mini, streaming)
-- Prisma + Neon PostgreSQL (Database)
-- Tailwind CSS (Styling)
-- React Markdown + remark-gfm (Message rendering)
+- Tailwind CSS 3.4
+- Clerk (auth)
+- Prisma + Neon Postgres (database)
+- OpenAI GPT-4o-mini (chat completions)
+- React Markdown + remark-gfm (rendering)
+- Svix (Clerk webhook verification)
 
-## Current state — VERIFICATION FIX PASS 2/2 ✅
+## What has been built
+- `.env.example` — documented all required env vars
+- `.env.local` — working local config with Neon DB URL
+- `app/page.tsx` — main chat UI with sidebar, streaming, markdown rendering
+- `app/layout.tsx` — root layout with ClerkProvider (dark theme)
+- `app/api/chat/route.ts` — streaming OpenAI endpoint with Prisma persistence
+- `app/api/webhooks/clerk/route.ts` — Clerk webhook handler (Svix-verified)
+- `app/sign-in/[[...sign-in]]/page.tsx` — Clerk sign-in
+- `app/sign-up/[[...sign-up]]/page.tsx` — Clerk sign-up
+- `middleware.ts` — Clerk route protection
+- `prisma/schema.prisma` — User, Conversation, Message models
+- `lib/prisma.ts` — singleton Prisma client
+- `lib/utils.ts` — cn() utility
+- `components/ui/button.tsx` — reusable button component
+- `components/ui/card.tsx` — reusable card component
+- `app/globals.css` — Tailwind + custom CSS variables (dark theme)
 
-### Issue 1: Server env vars not configured
-**Fixed** ✅ — Set as managed secrets on the platform:
-- `NODE_ENV` → `production`
-- `OPENAI_API_KEY` → placeholder (needs real OpenAI key)
-- `CLERK_SECRET_KEY` → placeholder (needs real Clerk key)
-- `CLERK_WEBHOOK_SECRET` → placeholder (needs real Clerk key)
-- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` → placeholder (needs real Clerk key)
-- `DATABASE_URL` + `DIRECT_URL` → auto-injected by managed Neon database
-
-### Issue 2: Prisma schema validation — DATABASE_URL not found
-**Fixed** ✅ — `.env.local` now has the real Neon DATABASE_URL and DIRECT_URL. `prisma/schema.prisma` has `directUrl = env("DIRECT_URL")` restored. Prisma validate passes.
-
-### Issue 3: Build failure — Cannot find module for page: /_document
-**Fixed** ✅ — Stale `.next` cache was the root cause. After clearing `.next` and re-running `next build`, all 6 routes compile successfully:
-- `/` (main chat UI, 10.2 kB)
-- `/_not-found` (404 page)
-- `/api/chat` (streaming API)
-- `/api/webhooks/clerk` (Clerk webhook)
-- `/sign-in/[[...sign-in]]` (auth)
-- `/sign-up/[[...sign-up]]` (auth)
-
-## Files
-- 25 files in workspace
-- Pushed to GitHub: https://github.com/Goatkenziee/ai-chatbot-app
-
-## Deploy status
-⛔ Blocked — Vercel integration expired. User needs to reconnect Vercel in Settings → Integrations.
-
-## Next steps
-1. User reconnects Vercel integration → deploy
-2. User sets real Clerk keys (NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY, CLERK_SECRET_KEY, CLERK_WEBHOOK_SECRET)
-3. User sets real OPENAI_API_KEY
-4. Run `prisma db push` to create tables in Neon
-5. Set up Clerk webhook in Clerk dashboard pointing to `/api/webhooks/clerk`
+## What's still pending
+- [ ] Reconnect Vercel integration → deploy to get live URL
+- [ ] Replace placeholder Clerk keys with real values from Clerk dashboard
+- [ ] Replace placeholder OpenAI key with real API key
+- [ ] Set up Clerk webhook endpoint in Clerk dashboard → point to deployed webhook URL
+- [ ] Run `prisma db push` on deploy to sync schema
