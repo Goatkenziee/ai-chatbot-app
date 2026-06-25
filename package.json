@@ -1,31 +1,29 @@
 {
-  "name": "ai-chatbot-app",
+  "name": "ai-chatbot",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate || echo 'Prisma generate skipped (no DB URL yet)'",
+    "postinstall": "prisma generate",
     "db:push": "prisma db push",
-    "db:seed": "tsx prisma/seed.ts",
-    "prisma:generate": "prisma generate"
+    "db:seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
-    "next": "14.2.4",
+    "next": "14.2.21",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "clsx": "^2.1.1",
     "tailwind-merge": "^2.5.2",
     "lucide-react": "^0.439.0",
-    "@clerk/nextjs": "^5.7.5",
     "@prisma/client": "^5.20.0",
+    "@clerk/nextjs": "^5.7.0",
     "openai": "^4.67.0",
-    "svix": "^1.42.0",
-    "uuid": "^10.0.0",
-    "react-markdown": "^9.0.1",
-    "remark-gfm": "^4.0.0"
+    "nanoid": "^5.0.8",
+    "marked": "^14.1.0",
+    "highlight.js": "^11.10.0"
   },
   "devDependencies": {
     "typescript": "^5.5.4",
