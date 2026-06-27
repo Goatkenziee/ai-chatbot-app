@@ -1,16 +1,8 @@
 {
-  "updatedAt": "2026-06-25T00:51:31.492Z",
+  "updatedAt": "2026-06-27T02:11:35.279Z",
   "framework": "Next.js",
-  "dbModels": [
-    "User",
-    "Conversation",
-    "Message"
-  ],
-  "apiRoutes": [
-    "app/api/chat/route.ts",
-    "app/api/conversations/[id]/route.ts",
-    "app/api/conversations/route.ts"
-  ],
+  "dbModels": [],
+  "apiRoutes": [],
   "pages": [
     "app/page.tsx"
   ],
@@ -22,31 +14,24 @@
   ],
   "dependencies": [
     "@clerk/nextjs",
-    "@prisma/client",
     "@types/node",
     "@types/react",
     "@types/react-dom",
     "autoprefixer",
     "clsx",
-    "highlight.js",
     "lucide-react",
-    "marked",
-    "nanoid",
     "next",
     "openai",
     "postcss",
-    "prisma",
     "react",
     "react-dom",
+    "react-markdown",
+    "rehype-highlight",
+    "remark-gfm",
     "tailwind-merge",
     "tailwindcss",
-    "tsx",
-    "typescript"
+    "typescript",
+    "uuid"
   ],
-  "fileCount": 24,
-  "fixedIssues": [
-    "Set CLERK_SECRET_KEY, NODE_ENV, OPENAI_API_KEY as managed secrets",
-    "Prisma schema DIRECT_URL issue — already resolved in prior run (schema has no directUrl)",
-    "Upgraded next@14.2.5 → 14.2.21 to fix _document build error"
-  ]
+  "fileCount": 20
 }
