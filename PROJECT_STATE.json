@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-27T02:11:35.279Z",
+  "updatedAt": "2026-06-27T02:19:13.919Z",
   "framework": "Next.js",
   "dbModels": [],
   "apiRoutes": [],
@@ -7,10 +7,16 @@
     "app/page.tsx"
   ],
   "components": [
+    "app/error.tsx",
     "app/layout.tsx",
+    "app/loading.tsx",
     "app/not-found.tsx",
+    "components/chat-error.tsx",
+    "components/error-boundary.tsx",
+    "components/loading-skeleton.tsx",
     "components/ui/button.tsx",
-    "components/ui/card.tsx"
+    "components/ui/card.tsx",
+    "components/ui/mobile-nav.tsx"
   ],
   "dependencies": [
     "@clerk/nextjs",
@@ -33,5 +39,5 @@
     "typescript",
     "uuid"
   ],
-  "fileCount": 20
+  "fileCount": 28
 }

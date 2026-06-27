@@ -13,18 +13,104 @@
   --primary-foreground: 240 10% 4%;
   --accent: 280 90% 66%;
   --accent-foreground: 0 0% 100%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
   --border: 240 6% 16%;
   --radius: 0.75rem;
 }
 
-* { border-color: hsl(var(--border)); }
+* {
+  border-color: hsl(var(--border));
+}
+
 body {
   background: hsl(var(--background));
   color: hsl(var(--foreground));
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+/* Gradient text utility */
 .gradient-text {
   background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)));
-  -webkit-background-clip: text; background-clip: text; color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
-.glow { box-shadow: 0 0 80px -20px hsl(var(--primary) / 0.55); }
+
+/* Glow effect */
+.glow {
+  box-shadow: 0 0 80px -20px hsl(var(--primary) / 0.55);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted));
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
+}
+
+/* Better touch targets on mobile */
+@layer base {
+  button,
+  a,
+  input,
+  textarea,
+  select {
+    @media (max-width: 768px) {
+      min-height: 44px;
+    }
+  }
+}
+
+/* Responsive typography */
+@layer utilities {
+  .text-fluid-sm {
+    font-size: clamp(0.75rem, 2vw, 0.875rem);
+  }
+  .text-fluid-base {
+    font-size: clamp(0.875rem, 2.5vw, 1rem);
+  }
+  .text-fluid-lg {
+    font-size: clamp(1rem, 3vw, 1.25rem);
+  }
+  .text-fluid-xl {
+    font-size: clamp(1.25rem, 4vw, 1.75rem);
+  }
+  .text-fluid-2xl {
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+  }
+}
+
+/* Smooth loading shimmer */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--muted)) 25%,
+    hsl(var(--muted) / 0.5) 50%,
+    hsl(var(--muted)) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
