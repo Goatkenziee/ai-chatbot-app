@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { MobileNav } from "@/components/ui/mobile-nav";
@@ -83,7 +85,7 @@ export default function Home() {
             </Card>
             <Card className="p-4 sm:p-6">
               <Shield className="mb-3 h-5 w-5 sm:h-6 sm:w-6 text-accent" />
-              <h3 className="text-sm sm:text-base font-semibold">Secure & Private</h3>
+              <h3 className="text-sm sm:text-base font-semibold">Secure &amp; Private</h3>
               <p className="mt-1.5 text-xs sm:text-sm text-muted-foreground leading-relaxed">
                 Authentication built in. Your conversations stay yours — always encrypted.
               </p>
